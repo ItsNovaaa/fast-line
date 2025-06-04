@@ -16,7 +16,7 @@ func Load() *Config {
 	return &Config{
 		Port:           getEnv("PORT", "8000"),
 		DatabaseURL:    getEnv("DATABASE_URL", "postgres://postgres:password@localhost:5432/fastline?sslmode=disable"),
-		JWTSecret:      getEnv("JWT_SECRET","secret"),
+		JWTSecret:      getEnv("JWT_SECRET","JWT_SECRET"),
 		JWTExpiry:      time.Duration(time.Minute * 15),
 	}
 }
