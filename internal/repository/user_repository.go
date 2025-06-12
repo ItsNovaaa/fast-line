@@ -67,7 +67,7 @@ func (r *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	return &models.User{
 		ID:        user.ID,
 		Email:     user.Email,
-		// Password: user.Password, // Sebaiknya jangan kembalikan password
+		Password: user.Password, // Sebaiknya jangan kembalikan password
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 		Phone:     &user.Phone, // BENAR: Ambil alamat untuk membuat pointer

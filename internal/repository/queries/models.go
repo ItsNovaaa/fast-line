@@ -6,9 +6,21 @@ package queries
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/google/uuid"
 )
+
+type Circuit struct {
+	ID          uuid.UUID
+	Name        string
+	CircuitName string
+	StartDate   time.Time
+	EndDate     time.Time
+	Status      int32
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+}
 
 type User struct {
 	ID        uuid.UUID
