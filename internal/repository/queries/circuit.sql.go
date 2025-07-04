@@ -62,13 +62,58 @@ func (q *Queries) CreateCircuit(ctx context.Context, arg CreateCircuitParams) (C
 
 const deleteCircuit = `-- name: DeleteCircuit :exec
 UPDATE circuits
-SET status = FALSE, updated_at = NOW()
+SET status = 0, updated_at = NOW()
 WHERE id = $1
 `
 
 func (q *Queries) DeleteCircuit(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.ExecContext(ctx, deleteCircuit, id)
 	return err
+}
+
+const getActiveCircuits = `-- name: GetActiveCircuits :many
+SELECT id, name, circuit_name, start_date, end_date, status, created_at, updated_at
+FROM circuits
+WHERE status = 1
+ORDER BY created_at DESC
+LIMIT $1 OFFSET $2
+`
+
+type GetActiveCircuitsParams struct {
+	Limit  int32
+	Offset int32
+}
+
+func (q *Queries) GetActiveCircuits(ctx context.Context, arg GetActiveCircuitsParams) ([]Circuit, error) {
+	rows, err := q.db.QueryContext(ctx, getActiveCircuits, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Circuit
+	for rows.Next() {
+		var i Circuit
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.CircuitName,
+			&i.StartDate,
+			&i.EndDate,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getCircuitByID = `-- name: GetCircuitByID :one

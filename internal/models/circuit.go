@@ -25,6 +25,7 @@ type CreateCircuitRequest struct {
 }
 
 type UpdateCircuitRequest struct {
+    // ID          uuid.UUID `json:"id" binding:"required"`
     Name        string    `json:"name" binding:"required,min=3,max=255"`
     CircuitName string    `json:"circuit_name" binding:"required,min=3,max=255"`
     StartDate   time.Time `json:"start_date" binding:"required"`

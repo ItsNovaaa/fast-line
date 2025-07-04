@@ -51,30 +51,20 @@ func (s *AuthService) Register(req *models.CreateUserRequest) (*models.AuthRespo
 }
 
 func (s *AuthService) Login(req *models.LoginRequest) (*models.AuthResponse, error) {
-    // Define a single, secure error for all authentication failures.
-    // Get user by email
     user, err := s.userRepo.GetUserByEmail(req.Email)
     if err != nil {
         return nil, err
     }
-
-    // Check if the provided password matches the hash.
     if err := utils.CheckPassword(req.Password, user.Password); err != nil {
         return nil, err
     }
-
-    // --- SUCCESS ---
-
-    // Generate token
     token, err := utils.GenerateToken(user.ID, user.Email, s.jwtSecret)
     if err != nil {
-        // This is a server-side problem
         return nil, errors.New("an unexpected error occurred")
     }
-
-    // This is now the only path that returns a non-nil AuthResponse
     return &models.AuthResponse{
         User:  user,
         Token: token,
     }, nil
+    
 }

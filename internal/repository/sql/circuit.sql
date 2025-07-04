@@ -26,5 +26,12 @@ RETURNING id, name, circuit_name, start_date, end_date, status, created_at, upda
 
 -- name: DeleteCircuit :exec
 UPDATE circuits
-SET status = FALSE, updated_at = NOW()
+SET status = 0, updated_at = NOW()
 WHERE id = $1;
+
+-- name: GetActiveCircuits :many
+SELECT id, name, circuit_name, start_date, end_date, status, created_at, updated_at
+FROM circuits
+WHERE status = 1
+ORDER BY created_at DESC
+LIMIT $1 OFFSET $2;
