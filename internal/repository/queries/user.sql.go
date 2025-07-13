@@ -8,6 +8,7 @@ package queries
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -117,10 +118,10 @@ type GetUserByIDRow struct {
 	Email     string
 	FirstName string
 	LastName  string
-	Phone     string
+	Phone     sql.NullString
 	IsActive  sql.NullBool
-	CreatedAt sql.NullTime
-	UpdatedAt sql.NullTime
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (GetUserByIDRow, error) {
@@ -157,10 +158,10 @@ type ListUsersRow struct {
 	Email     string
 	FirstName string
 	LastName  string
-	Phone     string
+	Phone     sql.NullString
 	IsActive  sql.NullBool
-	CreatedAt sql.NullTime
-	UpdatedAt sql.NullTime
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]ListUsersRow, error) {
@@ -212,10 +213,10 @@ type SearchUsersRow struct {
 	Email     string
 	FirstName string
 	LastName  string
-	Phone     string
+	Phone     sql.NullString
 	IsActive  sql.NullBool
-	CreatedAt sql.NullTime
-	UpdatedAt sql.NullTime
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 func (q *Queries) SearchUsers(ctx context.Context, dollar_1 sql.NullString) ([]SearchUsersRow, error) {
@@ -261,7 +262,7 @@ type UpdateUserParams struct {
 	ID        uuid.UUID
 	FirstName string
 	LastName  string
-	Phone     string
+	Phone     sql.NullString
 }
 
 type UpdateUserRow struct {
@@ -269,10 +270,10 @@ type UpdateUserRow struct {
 	Email     string
 	FirstName string
 	LastName  string
-	Phone     string
+	Phone     sql.NullString
 	IsActive  sql.NullBool
-	CreatedAt sql.NullTime
-	UpdatedAt sql.NullTime
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateUserRow, error) {
